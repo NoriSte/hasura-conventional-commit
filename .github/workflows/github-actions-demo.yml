@@ -31,7 +31,7 @@ jobs:
           error: 'Do not match, check https://regex101.com/r/r03vYz/1'
           excludeDescription: 'true' # Only the title of the PR must be checked
   check-pr-title-if-not-label:
-    if: !contains(github.event.issue.labels.*.name , 'skip-pr-title-check')
+    if: "!contains(github.event.issue.labels.*.name , 'skip-pr-title-check')"
     name: Check PR title if not label
     runs-on: ubuntu-latest
     steps:
