@@ -30,9 +30,9 @@ jobs:
           flags: 'gm'
           error: 'Do not match, check https://regex101.com/r/r03vYz/1'
           excludeDescription: 'true' # Only the title of the PR must be checked
-  check-pr-title-14:
-    if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == false
-    name: Validate Hasura PR title (14)
+  check-pr-title-15:
+    if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == true
+    name: Validate Hasura PR title (15)
     runs-on: ubuntu-latest
     steps:
       - name: Check Commit Type
