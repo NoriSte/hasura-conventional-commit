@@ -18,27 +18,30 @@ on:
       - 'releases/*'
 
 jobs:
-  check-pr-title-13:
-    if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == false
-    name: Validate Hasura PR title (13)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Commit Type
-        uses: gsactions/commit-message-checker@v2
-        with:
-          pattern: '^(?<type>fix|feat|chore|ci|refactor|test)\(((?<systemPart>console|hge|lux|docs)(, )?){1,4}( - (?<team>sre|security|platform|operations|design|databases|infra|growth|docs|connectors|controlplane|blaam|oss))?\)(?<breakingChangeFlag>!)?: (?<prTitle>.*)$'
-          flags: 'gm'
-          error: 'Do not match, check https://regex101.com/r/r03vYz/1'
-          excludeDescription: 'true' # Only the title of the PR must be checked
-  check-pr-title-15:
+  do-not-check-pr-title:
+    # This job ensure the users always received a feedback
     if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == true
-    name: Validate Hasura PR title (15)
+    name: Not validate Hasura PR title
     runs-on: ubuntu-latest
     steps:
-      - name: Check Commit Type
+      - name: Checker
         uses: gsactions/commit-message-checker@v2
         with:
-          pattern: '^(?<type>fix|feat|chore|ci|refactor|test)\(((?<systemPart>console|hge|lux|docs)(, )?){1,4}( - (?<team>sre|security|platform|operations|design|databases|infra|growth|docs|connectors|controlplane|blaam|oss))?\)(?<breakingChangeFlag>!)?: (?<prTitle>.*)$'
+          pattern: '.+'
           flags: 'gm'
-          error: 'Do not match, check https://regex101.com/r/r03vYz/1'
+          error: 'Something wrong happened since the regex should always pass'
+          excludeDescription: 'true' # Only the title of the PR must be checked
+
+  # This job ensure the users always received a feedback
+  check-pr-title:
+    if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == false
+    name: Validate Hasura PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^(?<type>fix|feat|chore|ci|refactor|test)\(((?<systemPart>console|hge|lux|docs)(,)?){1,4}( - (?<team>sre|security|platform|operations|design|databases|infra|growth|docs|connectors|controlplane|blaam|oss))?\)(?<breakingChangeFlag>!)?: (?<prTitle>.*)$'
+          flags: 'gm'
+          error: 'The PR title do not match the expected format, check out this playground https://regex101.com/r/oGwYUN/1 to test your PR title. If you really need your PR title is accepted as is, please add the `skip-pr-title-check` and leave a comment in the PR explaining why you skipped it'
           excludeDescription: 'true' # Only the title of the PR must be checked
