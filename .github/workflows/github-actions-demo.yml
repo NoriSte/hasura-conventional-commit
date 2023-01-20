@@ -20,7 +20,7 @@ on:
 jobs:
   check-pr-title-if-not-label:
     if: "!contains(github.event.issue.labels.*.name , 'skip-pr-title-check')"
-    name: Check PR title
+    name: Check Hasura PR title
     runs-on: ubuntu-latest
     steps:
       - name: Check Commit Type
