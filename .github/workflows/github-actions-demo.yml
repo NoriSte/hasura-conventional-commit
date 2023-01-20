@@ -18,9 +18,9 @@ on:
       - 'releases/*'
 
 jobs:
-  check-pr-title-12:
+  check-pr-title-13:
     if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == false
-    name: Validate Hasura PR title (12)
+    name: Validate Hasura PR title (13)
     runs-on: ubuntu-latest
     steps:
       - name: Check Commit Type
