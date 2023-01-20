@@ -19,7 +19,7 @@ on:
 
 jobs:
   check-pr-title-if-not-label:
-    if: "!contains(github.event.issue.labels.*.name, 'skip-pr-title-check')"
+    if: contains(github.event.issue.labels.*.name, 'skip-pr-title-check') == false
     name: Check Hasura PR title
     runs-on: ubuntu-latest
     steps:
