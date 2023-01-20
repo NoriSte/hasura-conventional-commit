@@ -6,46 +6,39 @@ on:
       - edited
       - reopened
       - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - main
+      - 'releases/*'
 
 jobs:
   check-commit-message:
     name: Check Commit Message
     runs-on: ubuntu-latest
     steps:
-      - name: Get PR Commits
-        id: 'get-pr-commits'
-        uses: tim-actions/get-pr-commits@master
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check Subject Line Length
-        uses: tim-actions/commit-message-checker-with-regex@v0.3.1
+          pattern: '\[[^]]+\] .+$'
+          flags: 'gm'
+          error: 'Your first line has to contain a commit type like "[BUGFIX]".'
+      - name: Check Line Length
+        uses: gsactions/commit-message-checker@v2
         with:
-          commits: ${{ steps.get-pr-commits.outputs.commits }}
-          pattern: '^.{0,75}(\n.*)*$'
-          error: 'Subject too long (max 75)'
-
-      - name: Check Body Line Length
-        if: ${{ success() || failure() }}
-        uses: tim-actions/commit-message-checker-with-regex@v0.3.1
+          pattern: '^[^#].{74}'
+          error: 'The maximum line length of 74 characters is exceeded.'
+          excludeDescription: 'true' # optional: this excludes the description body of a pull request
+          excludeTitle: 'true' # optional: this excludes the title of a pull request
+          checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
+          accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+      - name: Check for Resolves / Fixes
+        uses: gsactions/commit-message-checker@v2
         with:
-          commits: ${{ steps.get-pr-commits.outputs.commits }}
-          pattern: '^.+(\n.{0,72})*$'
-          error: 'Body line too long (max 72)'
-
-      - name: Check Fixes
-        if: ${{ success() || failure() }}
-        uses: tim-actions/commit-message-checker-with-regex@v0.3.1
-        with:
-          commits: ${{ steps.get-pr-commits.outputs.commits }}
-          pattern: '\s*Fixes\s*:?\s*(#\d+|github\.com\/kata-containers\/[a-z-.]*#\d+)'
-          error: 'No "Fixes" found'
-          one_pass_all_pass: 'true'
-
-      - name: Check subsystem
-        if: ${{ success() || failure() }}
-        uses: tim-actions/commit-message-checker-with-regex@v0.3.1
-        with:
-          commits: ${{ steps.get-pr-commits.outputs.commits }}
-          pattern: '^[\h]*([^:\h\n]+)[\h]*:'
-          error: 'Failed to find subsystem in subject'
+          pattern: '^.+(Resolves|Fixes): \#[0-9]+$'
+          error: 'You need at least one "Resolves|Fixes: #<issue number>" line.'
