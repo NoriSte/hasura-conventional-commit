@@ -30,3 +30,15 @@ jobs:
           flags: 'gm'
           error: 'Do not match, check https://regex101.com/r/r03vYz/1'
           excludeDescription: 'true' # Only the title of the PR must be checked
+  check-pr-title-i-label:
+    if: contains(github.event.issue.labels.*.name, 'skip-pr-title-check') == 'true'
+    name: Check Hasura PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^(?<type>fix|feat|chore|ci|refactor|test)\(((?<systemPart>console|hge|lux|docs)(, )?){1,4}( - (?<team>sre|security|platform|operations|design|databases|infra|growth|docs|connectors|controlplane|blaam|oss))?\)(?<breakingChangeFlag>!)?: (?<prTitle>.*)$'
+          flags: 'gm'
+          error: 'Do not match, check https://regex101.com/r/r03vYz/1'
+          excludeDescription: 'true' # Only the title of the PR must be checked
