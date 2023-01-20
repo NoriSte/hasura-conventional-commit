@@ -19,7 +19,8 @@ on:
 
 jobs:
   check-commit-message:
-    if: !contains(github.event.issue.labels.*.name , 'skip-pr-title-check')
+    # if: !contains(github.event.issue.labels.*.name , 'skip-pr-title-check')
+    if: github.repository == 'octo-org/octo-repo-prod'
     name: Check PR title
     runs-on: ubuntu-latest
     steps:
