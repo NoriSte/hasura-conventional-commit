@@ -29,7 +29,7 @@ jobs:
       - name: Check PR title against Hasura conventional commit
         uses: gsactions/commit-message-checker@v2
         with:
-          pattern: '^(?<type>fix|feat|chore|ci|refactor|test)\(((?<systemPart>console|hge|lux|docs|infra|website)(,)?){1,4}\)(?<breakingChangeFlag>!)?: (?<prTitle>.*)$'
+          pattern: '^(?<type>fix|feat|chore|ci|refactor|test)\(((?<systemPart>console|hge|lux|docs|infra)(,)?){1,4}\)(?<breakingChangeFlag>!)?: (?<prTitle>.*)$'
           flags: 'gm'
           error: 'The PR title do not match the expected format, check out this playground https://regex101.com/r/VyZRuo/1 to test your PR title. If you really need your PR title is accepted as is, please add the `skip-pr-title-check` and leave a comment in the PR explaining why you skipped it'
           excludeDescription: 'true' # Only the title of the PR must be checked
