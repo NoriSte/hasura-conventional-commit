@@ -16,6 +16,8 @@ on:
     branches:
       - main
       - 'releases/*'
+  label:
+    types: [created, deleted, edited]
 
 jobs:
   do-not-check-pr-title:
