@@ -25,7 +25,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == true
     name: Not validate Hasura PR title
     runs-on: ubuntu-latest
-    steps:`
+    steps:
       - name: Checker
         uses: gsactions/commit-message-checker@v2
         with:
