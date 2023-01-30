@@ -20,20 +20,6 @@ on:
       - 'releases/*'
 
 jobs:
-  do-not-check-pr-title:
-    # This job ensure the users always received a feedback
-    if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == true
-    name: Not validate Hasura PR title
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checker
-        uses: gsactions/commit-message-checker@v2
-        with:
-          pattern: '.+'
-          flags: 'gm'
-          error: 'Something wrong happened since the regex should always pass'
-          excludeDescription: 'true' # Only the title of the PR must be checked
-
   # This job ensure the users always received a feedback
   check-pr-title:
     if: contains(github.event.pull_request.labels.*.name, 'skip-pr-title-check') == false
